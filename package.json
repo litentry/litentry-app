@@ -70,7 +70,7 @@
     "rn-nodeify": "^10.3.0",
     "stream-browserify": "^3.0.0",
     "url": "^0.11.0",
-    "util": "^0.10.4"
+    "util": "^0.12.4"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
