@@ -1,10 +1,13 @@
 import {
+  addAccountScreen,
   apiLoadingScreen,
-  appNavigatorScreen,
+  apiLoadedNavigatorScreen,
+  balanceScreen,
   councilScreen,
   dashboardNavigator,
   dashboardScreen,
   devScreen,
+  drawerNavigatorScreen,
   motionDetailScreen,
   motionsScreen,
   myIdentityScreen,
@@ -46,10 +49,16 @@ type DrawerParamList = {
   [notificationSettingsScreen]: undefined;
 };
 
+type ApiLoadedParamList = {
+  [drawerNavigatorScreen]: undefined;
+  [addAccountScreen]: undefined;
+  [balanceScreen]: {address: string};
+};
+
 type AppStackParamList = {
-  [appNavigatorScreen]: undefined;
+  [apiLoadedNavigatorScreen]: undefined;
   [apiLoadingScreen]: {network: SupportedNetworkType; redirectTo: string | null} | undefined;
   [permissionGrantingPromptScreen]: undefined;
 };
 
-type CompleteNavigatorParamList = AppStackParamList & DrawerParamList & DashboardStackParamList;
+type CompleteNavigatorParamList = AppStackParamList & DrawerParamList & ApiLoadedParamList & DashboardStackParamList;

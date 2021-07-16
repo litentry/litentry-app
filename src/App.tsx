@@ -5,7 +5,6 @@ import {EvaIconsPack} from '@ui-kitten/eva-icons';
 import ThemeProvider from './context/ThemeContext';
 import ChainApiContextProvider from 'context/ChainApiContext';
 import {AccountsProvider} from 'src/context/AccountsContext';
-import BalanceContextProvider from 'context/BalanceContext';
 import TxContextProvider from 'context/TxContext';
 import AppNavigator from 'src/navigation/AppNavigator';
 import {IonicIconsPack} from './Ionic-icons';
@@ -33,11 +32,9 @@ export default function App() {
                   <ErrorBoundary>
                     <Host>
                       <AccountsProvider>
-                        <BalanceContextProvider>
-                          <TxContextProvider>
-                            <AppNavigator />
-                          </TxContextProvider>
-                        </BalanceContextProvider>
+                        <TxContextProvider>
+                          <AppNavigator />
+                        </TxContextProvider>
                       </AccountsProvider>
                     </Host>
                   </ErrorBoundary>

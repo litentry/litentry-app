@@ -8,7 +8,7 @@ import {NavigationProp, useNavigationState} from '@react-navigation/native';
 import messaging, {FirebaseMessagingTypes} from '@react-native-firebase/messaging';
 import {useQuery} from 'react-query';
 import {AppStackParamList} from 'src/navigation/navigation';
-import {apiLoadingNavigatorScreen, apiLoadingScreen, appNavigatorScreen} from 'src/navigation/routeKeys';
+import {apiLoadingScreen, apiLoadedNavigatorScreen} from 'src/navigation/routeKeys';
 import * as AsyncStorage from 'src/service/AsyncStorage';
 
 export function PermissionGrantingPrompt({navigation}: {navigation: NavigationProp<AppStackParamList>}) {
@@ -19,7 +19,7 @@ export function PermissionGrantingPrompt({navigation}: {navigation: NavigationPr
 
   const onSkip = () => {
     AsyncStorage.setItem(PERMISSION_GRANTING_SCREEN_SHOWN, true);
-    navigation.navigate(routeNames.includes(appNavigatorScreen) ? appNavigatorScreen : apiLoadingScreen);
+    navigation.navigate(routeNames.includes(apiLoadedNavigatorScreen) ? apiLoadedNavigatorScreen : apiLoadingScreen);
   };
 
   const onRequestPermissions = async () => {

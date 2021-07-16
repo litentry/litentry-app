@@ -1,40 +1,24 @@
+import {NavigationProp} from '@react-navigation/native';
+import {Button, Card, Input, Text} from '@ui-kitten/components';
+import {ChainApiContext} from 'context/ChainApiContext';
+import {TxContext} from 'context/TxContext';
+import Padder from 'presentational/Padder';
+import SafeView, {noTopEdges} from 'presentational/SafeView';
+import {SelectAccount} from 'presentational/SelectAccount';
 import * as React from 'react';
 import {useContext, useReducer} from 'react';
-import {Button, Card, Input, Layout, ListItem, Text} from '@ui-kitten/components';
-import globalStyles, {standardPadding} from 'src/styles';
-import {NavigationProp} from '@react-navigation/native';
-import {ActivityIndicator, StyleSheet, View} from 'react-native';
-import {useAccounts} from 'context/AccountsContext';
-import {ChainApiContext} from 'context/ChainApiContext';
-import {u8aToString} from '@polkadot/util';
-import Identicon from '@polkadot/reactnative-identicon';
-import Padder from 'presentational/Padder';
-import {TxContext} from 'context/TxContext';
+import {StyleSheet, View} from 'react-native';
 import {useQueryClient} from 'react-query';
-import {useAccountIdentity} from 'layout/Account';
-import SafeView, {noTopEdges} from 'presentational/SafeView';
 import {DashboardStackParamList} from 'src/navigation/navigation';
+import globalStyles, {standardPadding} from 'src/styles';
 
 export function SubmitTipScreen({navigation}: {navigation: NavigationProp<DashboardStackParamList>}) {
-  const {isLoading, data: account, error} = useAccount();
   const [state, dispatch] = useReducer(reducer, initialState);
   const {start} = useContext(TxContext);
   const {api} = useContext(ChainApiContext);
   const queryClient = useQueryClient();
 
-  if (isLoading) {
-    return <ActivityIndicator />;
-  }
-
-  if (error || !account) {
-    return <Text>Something went wrong</Text>;
-  }
-
-  if (!account) {
-    return <Text>Account not found in this server</Text>;
-  }
-
-  const valid = state.beneficiary && state.reason && state.reason.length > 4;
+  const valid = api && state.account && state.beneficiary && state.reason && state.reason.length > 4;
 
   return (
     <SafeView edges={noTopEdges}>
@@ -45,16 +29,8 @@ export function SubmitTipScreen({navigation}: {navigation: NavigationProp<Dashbo
               <View {...p}>
                 <Text>Sending from</Text>
               </View>
-            )}
-            footer={(p) => (
-              <View {...p}>
-                <Text category={'c1'}>{account.accountId.toString()}</Text>
-              </View>
             )}>
-            <ListItem
-              title={account.info ? u8aToString(account.info.display.asRaw) : account.accountId.toString()}
-              accessoryLeft={() => <Identicon value={account.accountId} size={30} />}
-            />
+            <SelectAccount onSelect={(payload) => dispatch({type: 'SET_ACCOUNT', payload})} selected={state.account} />
           </Card>
 
           <Padder scale={1.5} />
@@ -78,10 +54,10 @@ export function SubmitTipScreen({navigation}: {navigation: NavigationProp<Dashbo
         <Button
           disabled={!valid}
           onPress={() => {
-            if (api) {
+            if (api && state.account) {
               start({
                 api,
-                address: account.accountId.toString(),
+                address: state.account,
                 txMethod: 'tips.reportAwesome',
                 params: [state.reason, state.beneficiary],
                 title: 'Sending transaction tips.reportAwesome(reason, who)',
@@ -106,21 +82,16 @@ const styles = StyleSheet.create({
   rowContainer: {flexDirection: 'row', alignItems: 'center'},
 });
 
-function useAccount() {
-  const {accounts} = useAccounts();
-  const account = accounts?.[0];
-
-  return useAccountIdentity(account?.address.toString());
-}
-
 type Action =
   | {type: 'SET_BENEFICIARY'; payload: string}
+  | {type: 'SET_ACCOUNT'; payload: string}
   | {
       type: 'SET_REASON';
       payload: string;
     };
 
 type State = {
+  account?: string;
   beneficiary: string;
   reason: string;
 };
@@ -129,10 +100,11 @@ const initialState: State = {reason: '', beneficiary: ''};
 
 function reducer(state: State, action: Action): State {
   switch (action.type) {
+    case 'SET_ACCOUNT':
+      return {...state, account: action.payload};
     case 'SET_BENEFICIARY':
       return {...state, beneficiary: action.payload};
     case 'SET_REASON':
       return {...state, reason: action.payload};
   }
-  return state;
 }
