@@ -8,7 +8,7 @@ import {NetworkType, SupportedNetworkType} from 'src/types';
 import ModalTitle from './ModalTitle';
 import {Modalize} from 'react-native-modalize';
 import {Portal} from 'react-native-portalize';
-import useAccountDetail from 'src/hook/useAccountDetail';
+import useAccountDetail from 'src/api/hooks/useAccountDetail';
 import {ApiPromise} from '@polkadot/api';
 
 type PropTypes = {

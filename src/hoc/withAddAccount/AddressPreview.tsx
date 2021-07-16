@@ -8,7 +8,7 @@ import {AccountInfo} from '@polkadot/types/interfaces';
 import Identicon from '@polkadot/reactnative-identicon';
 import JudgmentStatus from 'presentational/JudgmentStatus';
 import {NetworkType} from 'src/types';
-import useAccountDetail from 'src/hook/useAccountDetail';
+import useAccountDetail from 'src/api/hooks/useAccountDetail';
 
 const {height} = Dimensions.get('window');
 

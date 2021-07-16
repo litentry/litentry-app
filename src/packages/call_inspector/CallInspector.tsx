@@ -13,7 +13,7 @@ import {isU8a, u8aToString} from '@polkadot/util';
 import {Balance, Call, FunctionMetadataLatest, ProposalIndex} from '@polkadot/types/interfaces';
 import React, {useContext} from 'react';
 import {standardPadding} from 'src/styles';
-import {useFormatBalance} from 'src/hook/useFormatBalance';
+import {useFormatBalance} from 'src/api/hooks/useFormatBalance';
 import {ChainApiContext} from 'context/ChainApiContext';
 import {Compact, GenericCall, getTypeDef} from '@polkadot/types';
 import {useQuery} from 'react-query';

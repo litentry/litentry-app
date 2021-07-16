@@ -4,7 +4,7 @@ import {Text} from '@ui-kitten/components';
 import {BlockNumber} from '@polkadot/types/interfaces';
 import BN from 'bn.js';
 
-import {useBlockTime} from 'src/hook/useBlockTime';
+import {useBlockTime} from 'src/api/hooks/useBlockTime';
 import {monofontFamily} from 'src/styles';
 
 type Props = {

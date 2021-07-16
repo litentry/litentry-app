@@ -2,7 +2,7 @@ import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {Card, Layout} from '@ui-kitten/components';
-import {useTips} from 'src/hook/useTips';
+import {useTips} from 'src/api/hooks/useTips';
 import StatInfoBlock from 'presentational/StatInfoBlock';
 import SeactionTeaserContainer from 'presentational/SectionTeaserContainer';
 import AddressInlineTeaser from 'layout/AddressInlineTeaser';

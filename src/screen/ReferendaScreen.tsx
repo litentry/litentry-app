@@ -6,9 +6,9 @@ import {ProposalInfo} from 'presentational/ProposalInfo';
 import SafeView, {noTopEdges} from 'presentational/SafeView';
 import * as React from 'react';
 import {FlatList, StyleSheet} from 'react-native';
-import {useBlockTime} from 'src/hook/useBlockTime';
-import {useReferendums} from 'src/hook/useReferendums';
-import {useBestNumber} from 'src/hook/useVotingStatus';
+import {useBlockTime} from 'src/api/hooks/useBlockTime';
+import {useReferendums} from 'src/api/hooks/useReferendums';
+import {useBestNumber} from 'src/api/hooks/useVotingStatus';
 import globalStyles, {standardPadding} from 'src/styles';
 
 export function ReferendaScreen() {

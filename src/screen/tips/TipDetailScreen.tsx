@@ -6,9 +6,8 @@ import {formatBalance, formatNumber, u8aToString} from '@polkadot/util';
 import {BlockNumber, OpenTip} from '@polkadot/types/interfaces';
 import Identicon from '@polkadot/reactnative-identicon';
 import {Card, Divider, List, ListItem, Text} from '@ui-kitten/components';
-import GenericNavigationLayout from 'presentational/GenericNavigationLayout';
 import AddressInlineTeaser from 'layout/AddressInlineTeaser';
-import {useTip} from 'src/hook/useTip';
+import {useTip} from 'src/api/hooks/useTip';
 import TipReason from 'layout/tips/TipReason';
 import globalStyles, {monofontFamily} from 'src/styles';
 import {useCall} from 'src/hook/useCall';
@@ -160,7 +159,7 @@ function EmptyTippers() {
   );
 }
 
-function TipDetailScreen({navigation, route}: ScreenProps) {
+function TipDetailScreen({route}: ScreenProps) {
   const {api} = useContext(ChainApiContext);
   const hash = route.params?.hash;
   const tip = useTip(hash);

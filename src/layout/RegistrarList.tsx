@@ -2,7 +2,7 @@ import React, {useMemo} from 'react';
 import {StyleSheet, View, FlatList} from 'react-native';
 import {formatBalance} from '@polkadot/util';
 import {Text, Divider} from '@ui-kitten/components';
-import {useRegistrars} from 'src/hook/useRegistrars';
+import {useRegistrars} from 'src/api/hooks/useRegistrars';
 import globalStyles, {standardPadding, monofontFamily} from 'src/styles';
 import StatInfoBlock from 'presentational/StatInfoBlock';
 import Padder from 'presentational/Padder';

@@ -6,7 +6,7 @@ import {u8aToString} from '@polkadot/util';
 import {NavigationProp} from '@react-navigation/native';
 import Identicon from '@polkadot/reactnative-identicon';
 import {EmptyView} from 'presentational/EmptyView';
-import {useCouncilMembers} from 'src/hook/useCouncilMembers';
+import {useCouncilMembers} from 'src/api/hooks/useCouncilMembers';
 import SafeView, {noTopEdges} from 'presentational/SafeView';
 import {motionsScreen} from 'src/navigation/routeKeys';
 import {DashboardStackParamList} from 'src/navigation/navigation';

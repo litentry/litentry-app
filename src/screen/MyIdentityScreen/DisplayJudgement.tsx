@@ -1,25 +1,22 @@
 import React, {useRef, useContext} from 'react';
 import {View, StyleSheet, Dimensions, ScrollView} from 'react-native';
+import {u8aToString} from '@polkadot/util';
+import {Modalize} from 'react-native-modalize';
 import {Text, Layout, ListItem, Divider, Icon, IconProps, Menu, MenuGroup, MenuItem} from '@ui-kitten/components';
+import Identicon from '@polkadot/reactnative-identicon';
+import {AccountId} from '@polkadot/types/interfaces';
 import WebView from 'react-native-webview';
+
 import {AddressDetailType} from 'src/types';
 import globalStyles, {standardPadding} from 'src/styles';
 import SuccessDialog from 'presentational/SuccessDialog';
-import Identicon from '@polkadot/reactnative-identicon';
 import Padder from 'presentational/Padder';
 import JudgmentStatus from 'presentational/JudgmentStatus';
-import {u8aToString} from '@polkadot/util';
-import {Modalize} from 'react-native-modalize';
 import {buildAddressDetailUrl} from 'src/service/Polkasembly';
 import {NetworkContext} from 'context/NetworkContext';
-import {useCall} from 'src/hook/useCall';
-import {ChainApiContext} from 'context/ChainApiContext';
-import {ITuple} from '@polkadot/types/types';
-import {BalanceOf, AccountId} from '@polkadot/types/interfaces';
-import {Vec} from '@polkadot/types';
 import AddressInlineTeaser from 'layout/AddressInlineTeaser';
 import InfoBanner from 'presentational/InfoBanner';
-import {useQuery} from 'react-query';
+import {useSubAccounts} from 'src/api/hooks/useSubAccounts';
 
 const {height} = Dimensions.get('window');
 
@@ -33,13 +30,10 @@ const SubAccountsIcon = (props: IconProps) => <Icon {...props} pack="ionic" name
 
 const MoreIcon = (props: IconProps) => <Icon {...props} pack="ionic" name="ios-apps-outline" />;
 
-type SubAccounts = ITuple<[BalanceOf, Vec<AccountId>]>;
-
 function DisplayJudgement(props: PropTypes) {
   const {display, detail, address} = props;
   const judgementCount = detail.data?.judgements.length || 0;
   const {currentNetwork} = useContext(NetworkContext);
-  const {api} = useContext(ChainApiContext);
   const successMsg = `This address has ${judgementCount} judgement${
     judgementCount > 1 ? 's' : ''
   } from Registrar ${detail.data?.judgements.map((judgement) => `#${judgement[0]}`).join(',')}. It's all set. 🎉`;
@@ -53,11 +47,7 @@ function DisplayJudgement(props: PropTypes) {
 
   const identity = detail?.data;
   const modalRef = useRef<Modalize>(null);
-  const {data: subAccounts} = useQuery(
-    ['sub_accounts', address],
-    () => api?.query.identity.subsOf(address) as unknown as Promise<SubAccounts>,
-    {enabled: !!address},
-  );
+  const {data: subAccounts} = useSubAccounts(address);
   const subAccountsArray = subAccounts?.[1];
 
   return (

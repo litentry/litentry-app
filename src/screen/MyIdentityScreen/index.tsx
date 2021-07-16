@@ -2,7 +2,7 @@ import React, {useContext, useMemo} from 'react';
 import {RouteProp, useRoute} from '@react-navigation/native';
 import {NetworkContext} from 'context/NetworkContext';
 import {ChainApiContext} from 'context/ChainApiContext';
-import useAccountDetail from 'src/hook/useAccountDetail';
+import useAccountDetail from 'src/api/hooks/useAccountDetail';
 import SetInfo from './SetInfo';
 import RequestJudgement from './RequestJudgement';
 import DisplayJudgement from './DisplayJudgement';

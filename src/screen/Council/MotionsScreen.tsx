@@ -1,23 +1,24 @@
-import {Button, Card, Divider, ListItem, Text} from '@ui-kitten/components';
 import React, {useContext} from 'react';
-import {standardPadding} from 'src/styles';
-import {ChainApiContext} from 'context/ChainApiContext';
+import {useQueryClient} from 'react-query';
+import {Button, Card, Divider, ListItem, Text} from '@ui-kitten/components';
 import {FlatList, StyleSheet, View} from 'react-native';
 import {formatNumber} from '@polkadot/util';
-import {useVotingStatus} from 'src/hook/useVotingStatus';
 import type {DeriveCollectiveProposal} from '@polkadot/api-derive/types';
+
+import {ChainApiContext} from 'context/ChainApiContext';
 import {TxContext} from 'context/TxContext';
 import {EmptyView} from 'presentational/EmptyView';
 import Padder from 'presentational/Padder';
-import {useQuery, useQueryClient} from 'react-query';
 import {useAccounts} from 'context/AccountsContext';
-import {useCouncilMembers} from 'src/hook/useCouncilMembers';
+import {useVotingStatus} from 'src/api/hooks/useVotingStatus';
+import {useCouncilMembers} from 'src/api/hooks/useCouncilMembers';
 import SafeView, {noTopEdges} from 'presentational/SafeView';
 import {ProposalInfo} from 'presentational/ProposalInfo';
+import {useMotions} from 'src/api/hooks/useMotions';
+import {standardPadding} from 'src/styles';
 
 export function MotionsScreen() {
-  const {api} = useContext(ChainApiContext);
-  const {data, refetch, isLoading} = useQuery('motions', () => api?.derive.council.proposals());
+  const {data, refetch, isLoading} = useMotions();
 
   return (
     <SafeView edges={noTopEdges}>

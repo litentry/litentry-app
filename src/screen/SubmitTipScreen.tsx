@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {useContext, useReducer} from 'react';
-import {Button, Card, Input, Layout, ListItem, Text} from '@ui-kitten/components';
+import {Button, Card, Input, ListItem, Text} from '@ui-kitten/components';
 import globalStyles, {standardPadding} from 'src/styles';
 import {NavigationProp} from '@react-navigation/native';
 import {ActivityIndicator, StyleSheet, View} from 'react-native';
@@ -11,7 +11,7 @@ import Identicon from '@polkadot/reactnative-identicon';
 import Padder from 'presentational/Padder';
 import {TxContext} from 'context/TxContext';
 import {useQueryClient} from 'react-query';
-import {useAccountIdentity} from 'layout/Account';
+import {useAccountIdentityInfo} from 'src/api/hooks/useAccountIdentityInfo';
 import SafeView, {noTopEdges} from 'presentational/SafeView';
 import {DashboardStackParamList} from 'src/navigation/navigation';
 
@@ -108,9 +108,9 @@ const styles = StyleSheet.create({
 
 function useAccount() {
   const {accounts} = useAccounts();
-  const account = accounts?.[0];
+  const account = accounts[0]!; // TODO: remove this after merging multi view account
 
-  return useAccountIdentity(account?.address.toString());
+  return useAccountIdentityInfo(account?.address.toString());
 }
 
 type Action =
@@ -133,6 +133,7 @@ function reducer(state: State, action: Action): State {
       return {...state, beneficiary: action.payload};
     case 'SET_REASON':
       return {...state, reason: action.payload};
+    default:
+      return state;
   }
-  return state;
 }

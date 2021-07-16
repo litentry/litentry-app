@@ -3,7 +3,7 @@ import {StyleSheet} from 'react-native';
 import {Hash} from '@polkadot/types/interfaces';
 import {Text} from '@ui-kitten/components';
 
-import {useTipReason} from 'src/hook/useTipReason';
+import {useTipReason} from 'src/api/hooks/useTipReason';
 import {monofontFamily, standardPadding} from 'src/styles';
 
 const styles = StyleSheet.create({

@@ -1,8 +1,7 @@
-import {useContext} from 'react';
+import {ApiPromise} from '@polkadot/api';
 import type {Option} from '@polkadot/types';
 import type {OpenTip, OpenTipTo225} from '@polkadot/types/interfaces';
-import {ChainApiContext} from 'context/ChainApiContext';
-import {useQuery} from 'react-query';
+import useApiQuery from 'src/api/hooks/useApiQuery';
 
 export type Tip = [string, OpenTip | OpenTipTo225];
 
@@ -28,12 +27,7 @@ function extractTips(tipsWithHashes?: [string[], Option<OpenTip>[]], inHashes?: 
 }
 
 export function useTips() {
-  const {api} = useContext(ChainApiContext);
-
-  return useQuery('tips', async () => {
-    if (!api) {
-      throw new Error('Api not defined');
-    }
+  return useApiQuery('tips', async (api: ApiPromise) => {
     const hashes = await api.query.tips.tips.keys().then((keys) => keys.map((key) => key.args[0].toHex()));
 
     if (hashes.length) {

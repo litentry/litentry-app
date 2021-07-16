@@ -4,7 +4,7 @@ import {Card, Layout} from '@ui-kitten/components';
 import globalStyles from 'src/styles';
 import Padder from 'presentational/Padder';
 import SeactionTeaserContainer from 'presentational/SectionTeaserContainer';
-import {useBlockTime} from 'src/hook/useBlockTime';
+import {useBlockTime} from 'src/api/hooks/useBlockTime';
 import ProgressChartWidget from 'presentational/ProgressWidget';
 import StatInfoBlock from 'presentational/StatInfoBlock';
 import withTreasury, {InjectedPropTypes} from 'src/hoc/withTreasury';

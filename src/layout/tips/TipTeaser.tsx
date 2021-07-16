@@ -3,7 +3,7 @@ import Identicon from '@polkadot/reactnative-identicon';
 import {StyleSheet, View} from 'react-native';
 import {ListItem, Text} from '@ui-kitten/components';
 import {useNavigation} from '@react-navigation/native';
-import {Tip} from 'src/hook/useTips';
+import {Tip} from 'src/api/hooks/useTips';
 import {tipDetailScreen} from 'src/navigation/routeKeys';
 import TipReason from 'layout/tips/TipReason';
 import {Account} from 'src/layout/Account';

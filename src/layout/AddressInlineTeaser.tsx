@@ -6,7 +6,7 @@ import {ChainApiContext} from 'context/ChainApiContext';
 import Padder from 'presentational/Padder';
 import {monofontFamily} from 'src/styles';
 import {Text} from '@ui-kitten/components';
-import useAccountDetail from 'src/hook/useAccountDetail';
+import useAccountDetail from 'src/api/hooks/useAccountDetail';
 import {NetworkContext} from 'context/NetworkContext';
 
 type PropTypes = {

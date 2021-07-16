@@ -1,7 +1,7 @@
 import React from 'react';
 import {FlatList, StyleSheet, View} from 'react-native';
-import {Divider, Layout} from '@ui-kitten/components';
-import {useTips} from 'src/hook/useTips';
+import {Divider} from '@ui-kitten/components';
+import {useTips} from 'src/api/hooks/useTips';
 import TipTeaser from 'layout/tips/TipTeaser';
 import {EmptyView} from 'presentational/EmptyView';
 import globalStyles from 'src/styles';

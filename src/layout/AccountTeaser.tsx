@@ -11,7 +11,7 @@ import AccountInfoInlineTeaser from '../presentational/AccountInfoInlineTeaser';
 import {NetworkContext} from 'context/NetworkContext';
 import {useAccounts} from 'src/context/AccountsContext';
 import {ChainApiContext} from 'context/ChainApiContext';
-import useAccountDetail from 'src/hook/useAccountDetail';
+import useAccountDetail from 'src/api/hooks/useAccountDetail';
 import {useNavigation} from '@react-navigation/native';
 import {myIdentityScreen} from 'src/navigation/routeKeys';
 

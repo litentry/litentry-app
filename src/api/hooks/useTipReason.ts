@@ -3,7 +3,7 @@ import {hexToString} from '@polkadot/util';
 import {Option, Bytes} from '@polkadot/types';
 import {Hash} from '@polkadot/types/interfaces';
 import {ChainApiContext} from 'context/ChainApiContext';
-import {useCall} from './useCall';
+import {useCall} from 'src/hook/useCall';
 
 const transformTip = {
   transform: (optBytes: Option<Bytes>) => (optBytes.isSome ? hexToString(optBytes.unwrap().toHex()) : null),

@@ -6,7 +6,7 @@ import withElectionInfo, {InjectedPropTypes} from 'src/hoc/withElectionInfo';
 import Padder from 'presentational/Padder';
 import AddressInlineTeaser from './AddressInlineTeaser';
 import SeactionTeaserContainer from 'presentational/SectionTeaserContainer';
-import {useBlockTime} from 'src/hook/useBlockTime';
+import {useBlockTime} from 'src/api/hooks/useBlockTime';
 import ProgressChartWidget from 'presentational/ProgressWidget';
 import StatInfoBlock from 'presentational/StatInfoBlock';
 
