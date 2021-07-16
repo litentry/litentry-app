@@ -1,8 +1,8 @@
 import React from 'react';
 import {FlatList, StyleSheet, View} from 'react-native';
-import {Divider, Layout} from '@ui-kitten/components';
+import {Divider} from '@ui-kitten/components';
 import {useTips} from 'src/hook/useTips';
-import TipTeaser from 'layout/tips/TipTeaser';
+import {TipTeaser} from 'layout/tips/TipTeaser';
 import {EmptyView} from 'presentational/EmptyView';
 import globalStyles from 'src/styles';
 import LoadingView from 'presentational/LoadingView';
@@ -20,7 +20,6 @@ function TipsScreen() {
           <FlatList
             style={globalStyles.flex}
             data={tips}
-            ItemSeparatorComponent={Divider}
             renderItem={({item}) => <TipTeaser tip={item} />}
             keyExtractor={(item) => item.toString()}
             ListEmptyComponent={EmptyView}
