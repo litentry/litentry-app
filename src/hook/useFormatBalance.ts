@@ -1,4 +1,3 @@
-import {Balance} from '@polkadot/types/interfaces';
 import {useContext, useMemo} from 'react';
 import {ChainApiContext} from 'context/ChainApiContext';
 import {Registry} from '@polkadot/types/types';

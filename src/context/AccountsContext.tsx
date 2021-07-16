@@ -121,4 +121,8 @@ function useAccounts() {
   return context;
 }
 
-export {AccountsProvider, useAccounts};
+function getAccountDisplayValue(account: Account) {
+  return account.name ? account.name : account.address;
+}
+
+export {AccountsProvider, useAccounts, getAccountDisplayValue};

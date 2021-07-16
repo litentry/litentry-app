@@ -1,21 +1,21 @@
-import React, {createContext, useCallback, useMemo, useReducer, useRef} from 'react';
-import {Dimensions, StyleSheet} from 'react-native';
 import {ApiPromise} from '@polkadot/api';
-import {get} from 'lodash';
 import {SubmittableExtrinsic} from '@polkadot/api/submittable/types';
-import {Modalize} from 'react-native-modalize';
-import {Icon, IconProps, Layout, Text} from '@ui-kitten/components';
-import QRCodeScanner from 'react-native-qrcode-scanner';
-import globalStyles, {standardPadding} from 'src/styles';
-import {ITuple, SignerPayloadJSON, SignerResult} from '@polkadot/types/types';
 import {DispatchError} from '@polkadot/types/interfaces';
+import {ITuple, SignerPayloadJSON, SignerResult} from '@polkadot/types/types';
 import {BN_ZERO} from '@polkadot/util';
-import QrSigner from 'src/service/QrSigner';
-import TxPayloadQr from 'presentational/TxPayloadQr';
+import {Icon, IconProps, Layout, Text} from '@ui-kitten/components';
+import {PreviewStep} from 'context/TxContext/PreviewStep';
+import {get} from 'lodash';
+import ErrorDialog from 'presentational/ErrorDialog';
 import LoadingView from 'presentational/LoadingView';
 import SuccessDialog from 'presentational/SuccessDialog';
-import ErrorDialog from 'presentational/ErrorDialog';
-import {PreviewStep} from 'context/TxContext/PreviewStep';
+import TxPayloadQr from 'presentational/TxPayloadQr';
+import React, {createContext, useCallback, useContext, useMemo, useReducer, useRef} from 'react';
+import {Dimensions, StyleSheet} from 'react-native';
+import {Modalize} from 'react-native-modalize';
+import QRCodeScanner from 'react-native-qrcode-scanner';
+import QrSigner from 'src/service/QrSigner';
+import globalStyles, {standardPadding} from 'src/styles';
 
 let id = 0;
 
@@ -29,6 +29,8 @@ type TxContextValueType = {
 export const TxContext = createContext<TxContextValueType>({
   start: () => Promise.resolve(),
 });
+
+export const useTX = () => useContext(TxContext);
 
 const AlertIcon = (props: IconProps) => <Icon fill="#ccc" {...props} name="alert-triangle-outline" />;
 
