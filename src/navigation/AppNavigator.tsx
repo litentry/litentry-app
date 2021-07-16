@@ -25,9 +25,11 @@ import {useTheme} from 'src/context/ThemeContext';
 import {darkTheme, lightTheme} from 'src/navigation/theme';
 import {useFirebase} from 'src/hook/useFirebase';
 import {ReferendaScreen} from 'screen/ReferendaScreen';
-import {PermissionGrantingPrompt, useShowPushPermissionScreen} from 'screen/PermissionGrantingPrompt';
+import {PermissionGrantingPrompt} from 'screen/PermissionGrantingPrompt';
 import LoadingView from 'presentational/LoadingView';
 import {NavigationContainer} from '@react-navigation/native';
+import {useShouldShowPushPermissionScreen} from 'src/hook/useGrantPermission';
+import {useTurnOnAllNotificationsOnAppStartForAndroid} from 'src/hook/useTurnOnAllNotificationsOnAppStartForAndroid';
 
 const DashboardStack = createStackNavigator<DashboardStackParamList>();
 
@@ -107,7 +109,11 @@ function AppNavigator() {
   const {api} = useContext(ChainApiContext);
   const {theme} = useTheme();
 
-  const {data: showPermissionGranting, isLoading} = useShowPushPermissionScreen();
+  // Start: app start hooks
+  useTurnOnAllNotificationsOnAppStartForAndroid();
+  // End: app start hooks
+
+  const {data: showPermissionGranting, isLoading} = useShouldShowPushPermissionScreen();
 
   if (isLoading) {
     return <LoadingView />;

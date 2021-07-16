@@ -1,38 +1,32 @@
 import React, {useState} from 'react';
 import {Button, Icon, Layout, Text, useTheme} from '@ui-kitten/components';
 import SafeView from 'presentational/SafeView';
-import {Platform, StyleSheet, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import globalStyles, {standardPadding} from 'src/styles';
 import Padder from 'presentational/Padder';
 import {NavigationProp, useNavigationState} from '@react-navigation/native';
-import messaging, {FirebaseMessagingTypes} from '@react-native-firebase/messaging';
-import {useQuery} from 'react-query';
 import {AppStackParamList} from 'src/navigation/navigation';
-import {apiLoadingNavigatorScreen, apiLoadingScreen, appNavigatorScreen} from 'src/navigation/routeKeys';
-import * as AsyncStorage from 'src/service/AsyncStorage';
+import {apiLoadingScreen, appNavigatorScreen} from 'src/navigation/routeKeys';
+import {useGrantPermission} from 'src/hook/useGrantPermission';
 
 export function PermissionGrantingPrompt({navigation}: {navigation: NavigationProp<AppStackParamList>}) {
   const routeNames = useNavigationState((state) => state.routeNames);
   const theme = useTheme();
-
-  const [error, setError] = useState<string>();
-
-  const onSkip = () => {
-    AsyncStorage.setItem(PERMISSION_GRANTING_SCREEN_SHOWN, true);
-    navigation.navigate(routeNames.includes(appNavigatorScreen) ? appNavigatorScreen : apiLoadingScreen);
-  };
-
-  const onRequestPermissions = async () => {
-    try {
-      const status = await messaging().requestPermission();
-      if (permissionAllowed(status)) {
+  const {grant, setPermissionGrantingToShown} = useGrantPermission({
+    onSettled: (granted) => {
+      if (granted) {
         onSkip();
       } else {
         setError('Permission denied, please turn the notification on in the settings app!');
       }
-    } catch (e) {
-      setError(e.message);
-    }
+    },
+  });
+
+  const [error, setError] = useState<string>();
+
+  const onSkip = () => {
+    setPermissionGrantingToShown();
+    navigation.navigate(routeNames.includes(appNavigatorScreen) ? appNavigatorScreen : apiLoadingScreen);
   };
 
   return (
@@ -55,7 +49,7 @@ export function PermissionGrantingPrompt({navigation}: {navigation: NavigationPr
             </>
           ) : null}
           <Padder scale={2} />
-          <Button status={'success'} onPress={onRequestPermissions}>
+          <Button status={'success'} onPress={() => grant()}>
             Allow Notifications
           </Button>
           <Padder scale={0.5} />
@@ -72,19 +66,3 @@ const styles = StyleSheet.create({
   icon: {width: 180, height: 180},
   container: {alignItems: 'center', justifyContent: 'center', flex: 1, padding: standardPadding * 4},
 });
-
-function permissionAllowed(status: FirebaseMessagingTypes.AuthorizationStatus) {
-  return status === messaging.AuthorizationStatus.AUTHORIZED || status === messaging.AuthorizationStatus.PROVISIONAL;
-}
-
-const PERMISSION_GRANTING_SCREEN_SHOWN = 'PERMISSION_GRANTING_SCREEN_SHOWN';
-
-export function useShowPushPermissionScreen() {
-  return useQuery('permission_granted', async () => {
-    return (
-      Platform.OS === 'ios' &&
-      (await AsyncStorage.getItem<boolean>(PERMISSION_GRANTING_SCREEN_SHOWN)) !== true &&
-      !permissionAllowed(await messaging().hasPermission())
-    );
-  });
-}

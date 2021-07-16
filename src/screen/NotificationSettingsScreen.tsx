@@ -1,22 +1,20 @@
-import React from 'react';
-import {Divider, Icon, Layout, ListItem, Text} from '@ui-kitten/components';
 import {DrawerNavigationProp} from '@react-navigation/drawer';
-import {StyleSheet, Switch, View} from 'react-native';
-import globalStyles, {standardPadding} from 'src/styles';
-import Padder from 'presentational/Padder';
-import {useMutation, useQuery, useQueryClient} from 'react-query';
+import {Divider, Icon, Layout, ListItem, Text} from '@ui-kitten/components';
 import LoadingView from 'presentational/LoadingView';
-import messaging from '@react-native-firebase/messaging';
+import Padder from 'presentational/Padder';
 import SafeView, {noTopEdges} from 'presentational/SafeView';
+import React from 'react';
+import {StyleSheet, Switch, View} from 'react-native';
+import {usePushTopics} from 'src/hook/usePushTopics';
 import {DrawerParamList} from 'src/navigation/navigation';
-import * as AsyncStorage from 'src/service/AsyncStorage';
+import globalStyles, {standardPadding} from 'src/styles';
 
 type PropTypes = {
   navigation: DrawerNavigationProp<DrawerParamList>;
 };
 
 export function NotificationSettingsScreen({}: PropTypes) {
-  const {topics, toggleTopic, isLoading} = useTopics();
+  const {topics, toggleTopic, isLoading} = usePushTopics();
 
   return (
     <SafeView edges={noTopEdges}>
@@ -57,69 +55,3 @@ const styles = StyleSheet.create({
     padding: standardPadding * 3,
   },
 });
-
-const TOPICS = [
-  {id: 'treasury.Proposed', label: 'New Treasury Proposal'},
-  {id: 'tips.NewTip', label: 'Tip Suggestion'},
-  {id: 'democracy.Started', label: 'New referendum has begun!'},
-];
-
-function useTopics() {
-  const queryClient = useQueryClient();
-
-  const {data, isLoading, isError} = useQuery('selected_push_topics', () =>
-    AsyncStorage.getItem<string[]>('selected_push_topics', []),
-  );
-
-  const {mutate: toggleTopic} = useMutation<
-    void,
-    unknown,
-    {id: string; subscribe: boolean},
-    {previousTopics: string[]}
-  >(
-    async ({id, subscribe}) => {
-      if (!data) {
-        throw new Error('DATA NOT LOADED YET!');
-      }
-      const updatedData = subscribe ? [...data, id] : data.filter((t) => t !== id);
-      await AsyncStorage.setItem('selected_push_topics', updatedData);
-      if (subscribe) {
-        await messaging().subscribeToTopic(id);
-      } else {
-        await messaging().unsubscribeFromTopic(id);
-      }
-    },
-    {
-      onSettled: () => queryClient.invalidateQueries('selected_push_topics'),
-
-      /**
-       * optimistic update
-       * more info: https://react-query.tanstack.com/guides/optimistic-updates#updating-a-list-of-todos-when-adding-a-new-todo
-       * */
-      onMutate: async ({id, subscribe}) => {
-        await queryClient.cancelQueries('selected_push_topics');
-        const previousTopics = queryClient.getQueryData<string[]>('selected_push_topics') ?? [];
-        queryClient.setQueryData<string[]>('selected_push_topics', (previousData) => {
-          if (!previousData) {
-            return [];
-          }
-          return subscribe ? [...previousData, id] : previousData.filter((t) => t !== id);
-        });
-        return {previousTopics};
-      },
-      onError: (err, vars, context) => {
-        console.error(err);
-        if (context?.previousTopics) {
-          queryClient.setQueryData('selected_push_topics', context.previousTopics);
-        }
-      },
-    },
-  );
-
-  return {
-    topics: TOPICS.map((t) => ({...t, selected: !!data?.includes(t.id)})),
-    toggleTopic,
-    isError,
-    isLoading,
-  };
-}
